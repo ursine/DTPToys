@@ -1,5 +1,11 @@
+package com.tdg.dtp.utils
+
 /**
-  * Created by garycoulbourne on 4/8/16.
+  * Rope data structure class
+  * @param length the total length of all nodes below this one
+  * @param left the left tree
+  * @param right the right tree
+  * @param guts the actual unicode string
   */
 case class Rope(length: Long = 0,
                 left: Option[Rope] = None,

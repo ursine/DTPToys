@@ -9,7 +9,11 @@ lazy val commonSettings = Seq(
 lazy val root = (project in file(".")).
   settings(commonSettings: _*).
   settings(
-    name := "Rope",
-    libraryDependencies += "org.scalactic" %% "scalactic" % "2.2.6",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+    name := "com.tdg.dtp.utils.Rope",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % "2.11.8",
+      "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.4",
+      "org.scalactic" %% "scalactic" % "2.2.6",
+      "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+    )
   )
