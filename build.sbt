@@ -14,6 +14,7 @@ lazy val root = (project in file(".")).
       "org.scala-lang" % "scala-reflect" % "2.11.8",
       "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.4",
       "org.scalactic" %% "scalactic" % "2.2.6",
-      "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+      "org.scalatest" %% "scalatest" % "2.2.6" % "test",
+      "org.scalafx" %% "scalafx" % "8.0.60-R9"
     )
   )

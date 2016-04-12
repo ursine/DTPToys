@@ -47,7 +47,45 @@ object PaperSizes {
     PaperSize("Arch E", PaperCategory.Arch, 914, 1219),
     PaperSize("Arch E1", PaperCategory.Arch, 762, 1067),
     PaperSize("Arch E2", PaperCategory.Arch, 660, 965),
-    PaperSize("Arch E3", PaperCategory.Arch, 686, 991)
+    PaperSize("Arch E3", PaperCategory.Arch, 686, 991),
+
+    PaperSize("RA0", PaperCategory.RaSra, 860, 1220),
+    PaperSize("RA1", PaperCategory.RaSra, 610, 860),
+    PaperSize("RA2", PaperCategory.RaSra, 430, 610),
+    PaperSize("RA3", PaperCategory.RaSra, 305, 430),
+    PaperSize("RA4", PaperCategory.RaSra, 215, 305),
+    PaperSize("SRA0", PaperCategory.RaSra, 900, 1280),
+    PaperSize("SRA1", PaperCategory.RaSra, 640, 900),
+    PaperSize("SRA2", PaperCategory.RaSra, 450, 640),
+    PaperSize("SRA3", PaperCategory.RaSra, 320, 450),
+    PaperSize("SRA4", PaperCategory.RaSra, 225, 320),
+
+    PaperSize("B0", PaperCategory.IntlB, 1414, 1000),
+    PaperSize("B1", PaperCategory.IntlB, 1000, 707),
+    PaperSize("B2", PaperCategory.IntlB, 707, 500),
+    PaperSize("B3", PaperCategory.IntlB, 500, 353),
+    PaperSize("B4", PaperCategory.IntlB, 353, 250),
+    PaperSize("B5", PaperCategory.IntlB, 250, 176),
+    PaperSize("B6", PaperCategory.IntlB, 176, 125),
+    PaperSize("B7", PaperCategory.IntlB, 125, 88),
+    PaperSize("B8", PaperCategory.IntlB, 88, 62),
+    PaperSize("B9", PaperCategory.IntlB, 62, 44),
+    PaperSize("B10", PaperCategory.IntlB,	44, 31),
+    PaperSize("B1+", PaperCategory.IntlB,	1020, 720),
+    PaperSize("B2+", PaperCategory.IntlB,	720, 520),
+
+    PaperSize("C0", PaperCategory.IntlC, 1297, 917),
+    PaperSize("C1", PaperCategory.IntlC, 917, 648),
+    PaperSize("C2", PaperCategory.IntlC, 648, 458),
+    PaperSize("C3", PaperCategory.IntlC, 458, 324),
+    PaperSize("C4", PaperCategory.IntlC, 324, 229),
+    PaperSize("C5", PaperCategory.IntlC, 229, 162),
+    PaperSize("C6", PaperCategory.IntlC, 162, 114),
+    PaperSize("C7", PaperCategory.IntlC, 114, 81),
+    PaperSize("C8", PaperCategory.IntlC, 81, 57),
+    PaperSize("C9", PaperCategory.IntlC, 57, 40),
+    PaperSize("C10", PaperCategory.IntlC, 40, 28)
+
   )
 
 }
@@ -78,6 +116,8 @@ object PaperCategory {
   object USANSI extends PaperCategory("US ANSI", PaperType.Sheet)
   object Arch extends PaperCategory("Architectural", PaperType.Sheet)
   object RaSra extends PaperCategory("RA & SRA", PaperType.Sheet)
+  object IntlB extends PaperCategory("International B", PaperType.Sheet)
+  object IntlC extends PaperCategory("International B", PaperType.Sheet)
 }
 
 sealed case class PaperType(name:String) extends NamedElement
