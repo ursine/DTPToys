@@ -1,5 +1,10 @@
 package com.tdg.dtp.utils
 
+
+trait NamedElement {
+  val name:String
+}
+
 object PaperSizes {
 
   val knownSizes = List(
@@ -27,14 +32,26 @@ object PaperSizes {
     PaperSize("A7", PaperCategory.IntlA, 74, 105),
     PaperSize("A8", PaperCategory.IntlA, 52, 74),
     PaperSize("A9", PaperCategory.IntlA, 37, 52),
-    PaperSize("A10", PaperCategory.IntlA, 26, 37)
+    PaperSize("A10", PaperCategory.IntlA, 26, 37),
+
+    PaperSize("ANSI A (letter)", PaperCategory.USANSI, 216, 279),
+    PaperSize("ANSI B (ledger & tabloid)", PaperCategory.USANSI, 279, 432),
+    PaperSize("ANSI C", PaperCategory.USANSI, 432, 559),
+    PaperSize("ANSI D", PaperCategory.USANSI, 559, 864),
+    PaperSize("ANSI E", PaperCategory.USANSI, 864, 1118),
+
+    PaperSize("Arch A", PaperCategory.Arch, 229, 305),
+    PaperSize("Arch B", PaperCategory.Arch, 305, 457),
+    PaperSize("Arch C", PaperCategory.Arch, 457, 610),
+    PaperSize("Arch D", PaperCategory.Arch, 610, 914),
+    PaperSize("Arch E", PaperCategory.Arch, 914, 1219),
+    PaperSize("Arch E1", PaperCategory.Arch, 762, 1067),
+    PaperSize("Arch E2", PaperCategory.Arch, 660, 965),
+    PaperSize("Arch E3", PaperCategory.Arch, 686, 991)
   )
 
 }
 
-trait NamedElement {
-  val name:String
-}
 
 /**
   * A class for storing common paper sizes
@@ -59,6 +76,8 @@ object PaperCategory {
   object BusinessCard extends PaperCategory("Business Card", PaperType.Sheet)
   object IntlA extends PaperCategory("International A", PaperType.Sheet)
   object USANSI extends PaperCategory("US ANSI", PaperType.Sheet)
+  object Arch extends PaperCategory("Architectural", PaperType.Sheet)
+  object RaSra extends PaperCategory("RA & SRA", PaperType.Sheet)
 }
 
 sealed case class PaperType(name:String) extends NamedElement
