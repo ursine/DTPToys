@@ -28,3 +28,9 @@
 *.app
 
 .idea
+
+cmake-build-debug
+CMakeFiles/
+*.cmake
+Makefile
+CMakeCache.txt
