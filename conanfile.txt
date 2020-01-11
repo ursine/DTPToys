@@ -1,0 +1,7 @@
+[requires]
+boost/[>=1.71.0]@conan/stable
+spdlog/[>=1.4.1]@bincrafters/stable
+
+
+[generators]
+cmake
