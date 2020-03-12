@@ -1,0 +1,3 @@
+[submodule "third-party/blend2d"]
+	path = third-party/blend2d
+	url = git@github.com:blend2d/blend2d.git
