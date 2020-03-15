@@ -4,8 +4,8 @@
 #include <wayland-client.h>
 
 
-struct wl_display* display = nullptr;
-struct wl_compositor* compositor = nullptr;
+static struct wl_display* display = nullptr;
+static struct wl_compositor* compositor = nullptr;
 
 
 static void global_registry_handler(void *data,
@@ -16,7 +16,7 @@ static void global_registry_handler(void *data,
 {
   printf("Got a registry event for %s id %d\n", interface, id);
   if (strcmp(interface, "wl_compositor") == 0)
-    compositor = wl_registry_bind(registry, 
+    compositor = (struct wl_compositor*)wl_registry_bind(registry,
 				  id, 
 				  &wl_compositor_interface, 
 				  1);
