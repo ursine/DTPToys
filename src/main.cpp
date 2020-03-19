@@ -4,6 +4,9 @@
 #include <wayland-client.h>
 #include <memory>
 
+#include "wayland_display.h"
+#include "wayland_registry.h"
+
 static struct wl_compositor *compositor = nullptr;
 static struct wl_surface *surface;
 static struct wl_shell *shell;
@@ -38,43 +41,12 @@ static const struct wl_registry_listener registry_listener = {
 };
 
 
-namespace WL {
-class Display {
-private:
-    std::shared_ptr<wl_display> display = nullptr;
-
-public:
-    Display() {
-        display.reset(wl_display_connect(nullptr),
-                wl_display_disconnect);
-
-        if (display == nullptr) {
-            fprintf(stderr, "Can't connect to display\n");
-            exit(1);
-        }
-        printf("connected to display\n");
-    }
-
-    ~Display() {
-        printf("disconnected from display\n");
-    }
-
-    int dispatch() { return wl_display_dispatch(display.get()); }
-
-    int roundtrip() { return wl_display_roundtrip(display.get()); }
-
-    wl_registry* get_registry() {
-        return wl_display_get_registry(display.get());
-    }
-
-    std::shared_ptr<wl_display> get_ptr() { return display; }
-};
-
-}
 
 int main(int argc, char *argv[]) {
 
     std::unique_ptr<WL::Display> display = std::make_unique<WL::Display>();
+
+    WL::Registry r(display);
 
     wl_registry *registry = display->get_registry();
     wl_registry_add_listener(registry, &registry_listener, nullptr);
