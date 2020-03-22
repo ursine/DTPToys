@@ -31,8 +31,8 @@
 
 cmake-build-debug
 CMakeFiles/
-*.cmake
 Makefile
 CMakeCache.txt
+cmake_install.cmake
 
 *.cbp
