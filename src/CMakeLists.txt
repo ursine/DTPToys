@@ -1,5 +1,9 @@
+include_directories(.)
 
 add_executable(DTPToys
+        LibCore/Object.cpp
+        LibCore/EventLoop.cpp
+        LibCore/Event.cpp
         main.cpp
         wayland_display.cpp
         wayland_display.h
