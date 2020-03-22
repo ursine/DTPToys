@@ -13,6 +13,8 @@ include(FeatureSummary)
 include(GNUInstallDirs)
 
 find_package(Wayland REQUIRED)
+find_package(spdlog REQUIRED)
+
 include_directories(${WAYLAND_CLIENT_INCLUDE_DIR})
 
 add_subdirectory(src)

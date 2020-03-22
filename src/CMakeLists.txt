@@ -6,4 +6,4 @@ add_executable(DTPToys
         wayland_registry.cpp
         wayland_registry.h)
 
-target_link_libraries(DTPToys PRIVATE ${WAYLAND_LIBRARIES})
+target_link_libraries(DTPToys PRIVATE ${WAYLAND_LIBRARIES} spdlog)
