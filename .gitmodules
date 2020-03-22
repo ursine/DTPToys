@@ -4,3 +4,6 @@
 [submodule "third-party/spdlog"]
 	path = third-party/spdlog
 	url = git@github.com:gabime/spdlog.git
+[submodule "third-party/fmtlib"]
+	path = third-party/fmtlib
+	url = https://github.com/fmtlib/fmt.git
