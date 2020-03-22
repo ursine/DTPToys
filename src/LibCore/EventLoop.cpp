@@ -65,6 +65,8 @@ struct EventLoopTimer {
     WeakPtr<Object> owner;
 
     void reload(const timeval& now);
+
+    [[nodiscard]]
     bool has_expired(const timeval& now) const;
 };
 
