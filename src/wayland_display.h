@@ -8,13 +8,16 @@
 #include <wayland-client-protocol.h>
 #include <memory>
 
+#include "wayland_seat.h"
+
+
 namespace WL {
 
     // Base class for any objects which come in via the registry
     class RegisteredObject {
     protected:
         uint32_t id;
-        const char* const interface;
+        std::string interface;
         void* object;
     public:
         RegisteredObject(uint32_t id, const char *const interface, void* const obj):
@@ -41,8 +44,12 @@ namespace WL {
 
         int dispatch() { return wl_display_dispatch(display); }
         int roundtrip() { return wl_display_roundtrip(display); }
-        int get_fd() { return wl_display_get_fd(display); }
-        int flush() { return wl_display_flush(display); }
+
+        [[nodiscard]]
+        int get_fd() const { return wl_display_get_fd(display); }
+
+        [[nodiscard]]
+        int flush() const { return wl_display_flush(display); }
 
         wl_display* get_ptr() { return display; }
     };

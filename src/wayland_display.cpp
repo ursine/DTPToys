@@ -14,8 +14,8 @@ static void global_registry_handler(void* const data,
                                     wl_registry* const registry,
                                     uint32_t id,
                                     const char* const interface,
-                                    uint32_t version) {
-
+                                    uint32_t version)
+{
     auto the_display = static_cast<WL::Display*>(data);
 
     printf("Got a registry event for %s id %d\n", interface, id);
@@ -46,7 +46,9 @@ static void global_registry_handler(void* const data,
 
 static void global_registry_remover(void *data,
                                     struct wl_registry *registry,
-                                    uint32_t id) {
+                                    uint32_t id)
+{
+    auto the_display = static_cast<WL::Display*>(data);
     printf("Got a registry losing event for %d\n", id);
 }
 
