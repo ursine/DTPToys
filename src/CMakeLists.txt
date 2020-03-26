@@ -1,5 +1,15 @@
 include_directories(.)
 
+add_custom_command(
+        OUTPUT xdg-shell-client-protocol.h
+        COMMAND ${WAYLAND_SCANNER_CMD} client-header ${WAYLAND_XDG_SHELL_XML} ${CMAKE_CURRENT_BINARY_DIR}/xdg-shell-client-protocol.h
+)
+
+add_custom_command(
+        OUTPUT xdg-shell-protocol.c
+        COMMAND ${WAYLAND_SCANNER_CMD} private-code ${WAYLAND_XDG_SHELL_XML} ${CMAKE_CURRENT_BINARY_DIR}/xdg-shell-protocol.c
+)
+
 add_executable(DTPToys
         AK/JsonParser.cpp
         AK/JsonValue.cpp
@@ -26,7 +36,13 @@ add_executable(DTPToys
 
         main.cpp
         wayland_display.cpp
-        wayland_display.h wayland_seat.cpp wayland_seat.h)
+        wayland_display.h
+        wayland_seat.cpp
+        wayland_seat.h
+
+        xdg-shell-client-protocol.h
+        xdg-shell-protocol.c
+        )
 
 target_link_libraries(DTPToys
         PRIVATE
