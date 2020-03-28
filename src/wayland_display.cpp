@@ -4,24 +4,115 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "wayland_display.h"
 #include <iostream>
 #include <map>
 
-static std::map<int32_t, WL::RegisteredObject> object_cache;
+#include "wayland_shm.h"
+#include "wayland_display.h"
+#include "gc_logging_utils.h"
 
-static void global_registry_handler(void* const data,
+
+static void WL::global_registry_handler(void* const data,
                                     wl_registry* const registry,
                                     uint32_t id,
                                     const char* const interface,
                                     uint32_t version)
 {
     auto the_display = static_cast<WL::Display*>(data);
+    auto logger = GC::log_get("registry");
 
-    printf("Got a registry event for %s id %d\n", interface, id);
+    logger->info("Registry emitted {} version {} : id# {}", interface, version, id);
+
+    if (strcmp(interface, wl_display_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_registry_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_callback_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_compositor_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_shm_pool_interface.name) == 0) {
+        return;
+    }
 
     if (strcmp(interface, wl_shm_interface.name) == 0) {
-        //shm = wl_registry_bind(registry, id, &wl_shm_interface, 1);
+        the_display->shared_memory = std::make_shared<WL::WaylandShm>(registry, id, version);
+        return;
+    }
+
+    if (strcmp(interface, wl_buffer_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_data_offer_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_data_source_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_data_device_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_data_device_manager_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_shell_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_shell_surface_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_surface_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_seat_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_pointer_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_keyboard_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_touch_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_output_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_region_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_subcompositor_interface.name) == 0) {
+        return;
+    }
+
+    if (strcmp(interface, wl_subsurface_interface.name) == 0) {
+        return;
+    }
+
+    /*
     } else if (strcmp(interface, wl_seat_interface.name) == 0) {
         auto seat = static_cast<wl_seat*>(wl_registry_bind(registry, id, &wl_seat_interface, 1));
         //wl_seat_add_listener(seat, &seat_listener, nullptr);
@@ -53,18 +144,20 @@ static void global_registry_remover(void *data,
 }
 
 static const struct wl_registry_listener registry_listener = {
-        global_registry_handler,
+        WL::global_registry_handler,
         global_registry_remover
 };
 
 WL::Display::Display() {
+    auto logger = GC::log_get("display");
+
     display = wl_display_connect(nullptr);
 
     if (display == nullptr) {
-        fprintf(stderr, "Can't connect to display\n");
+        logger->error("Can't connect to display");
         exit(EXIT_FAILURE);
     }
-    printf("connected to display\n");
+    logger->info("Connected to display");
 
     registry = wl_display_get_registry(display);
     wl_registry_add_listener(registry, &registry_listener, this);

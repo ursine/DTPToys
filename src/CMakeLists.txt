@@ -42,7 +42,7 @@ add_executable(DTPToys
 
         xdg-shell-client-protocol.h
         xdg-shell-protocol.c
-        )
+        gc_logging_utils.h wayland_shm.cpp wayland_shm.h)
 
 target_link_libraries(DTPToys
         PRIVATE

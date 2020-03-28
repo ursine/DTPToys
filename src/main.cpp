@@ -1,9 +1,9 @@
 #include <cstdio>
-
 #include <wayland-client.h>
 #include <memory>
 
 #include "wayland_display.h"
+#include "gc_logging_utils.h"
 
 static struct wl_compositor *compositor = nullptr;
 static struct wl_surface *surface;
@@ -12,6 +12,10 @@ static struct wl_shell_surface *shell_surface;
 
 
 int main(int argc, char *argv[]) {
+
+    const auto logger = GC::log_get("main");
+
+    logger->info("Getting Wayland Connection");
 
     std::unique_ptr<WL::Display> display = std::make_unique<WL::Display>();
 
