@@ -10,16 +10,16 @@
 
 namespace WL {
 
-    class WaylandShm {
+    class WaylandCompositor {
     private:
         wl_registry* const registry;
 
     protected:
-        wl_shm* const shm;
+        wl_compositor* compositor = nullptr;
 
     public:
-        WaylandShm(wl_registry* registry, uint32_t id, uint32_t version);
-        ~WaylandShm();
+        WaylandCompositor(wl_registry* registry, uint32_t id, uint32_t version);
+        ~WaylandCompositor();
     };
 
-};
+}

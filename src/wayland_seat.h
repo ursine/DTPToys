@@ -19,7 +19,7 @@ namespace WL {
         wl_seat* const seat;
 
     public:
-        explicit WaylandSeat(wl_registry* reg, int id);
+        explicit WaylandSeat(wl_registry* registry, uint32_t id, uint32_t version);
 
     };
 }

@@ -36,6 +36,7 @@ static void WL::global_registry_handler(void* const data,
     }
 
     if (strcmp(interface, wl_compositor_interface.name) == 0) {
+        the_display->compositor = std::make_shared<WL::WaylandCompositor>(registry, id, 1);
         return;
     }
 
@@ -44,7 +45,7 @@ static void WL::global_registry_handler(void* const data,
     }
 
     if (strcmp(interface, wl_shm_interface.name) == 0) {
-        the_display->shared_memory = std::make_shared<WL::WaylandShm>(registry, id, version);
+        the_display->shared_memory = std::make_shared<WL::WaylandShm>(registry, id, 1);
         return;
     }
 
@@ -81,6 +82,7 @@ static void WL::global_registry_handler(void* const data,
     }
 
     if (strcmp(interface, wl_seat_interface.name) == 0) {
+        the_display->seat = std::make_shared<WL::WaylandSeat>(registry, id, 1);
         return;
     }
 
@@ -108,27 +110,14 @@ static void WL::global_registry_handler(void* const data,
         return;
     }
 
-    if (strcmp(interface, wl_subsurface_interface.name) == 0) {
-        return;
-    }
 
     /*
-    } else if (strcmp(interface, wl_seat_interface.name) == 0) {
-        auto seat = static_cast<wl_seat*>(wl_registry_bind(registry, id, &wl_seat_interface, 1));
-        //wl_seat_add_listener(seat, &seat_listener, nullptr);
-        std::cout << "Bound Seat" << std::endl;
-    } else if (strcmp(interface, wl_compositor_interface.name) == 0) {
+    if (strcmp(interface, wl_compositor_interface.name) == 0) {
         //compositor = wl_registry_bind(registry, name,
         //                              &wl_compositor_interface, 1);
     } //else if (strcmp(interface, xdg_wm_base_interface.name) == 0) {
         //xdg_wm_base = wl_registry_bind(registry, name, &xdg_wm_base_interface, 1);
     //}
-
-    /*  if (strcmp(interface, "wl_compositor") == 0) {
-          compositor = (struct wl_compositor *) wl_registry_bind(registry,
-                                                                 id,
-                                                                 &wl_compositor_interface,
-                                                                 1);
       } else if (strcmp(interface, "wl_shell") == 0) {
           shell = (struct wl_shell *) wl_registry_bind(registry, id,
                                                        &wl_shell_interface, 1);
@@ -139,8 +128,9 @@ static void global_registry_remover(void *data,
                                     struct wl_registry *registry,
                                     uint32_t id)
 {
+    auto logger = GC::log_get("registry");
     auto the_display = static_cast<WL::Display*>(data);
-    printf("Got a registry losing event for %d\n", id);
+    logger->info("Removing object from registry");
 }
 
 static const struct wl_registry_listener registry_listener = {
@@ -163,12 +153,24 @@ WL::Display::Display() {
     wl_registry_add_listener(registry, &registry_listener, this);
 
     dispatch();
+
+    // Weston docs recommend two roundtrips
+    roundtrip();
     roundtrip();
 }
 
 WL::Display::~Display() {
+    auto logger = GC::log_get("display");
+
+    // Delete the various objects
+    compositor.reset();
+    shared_memory.reset();
+    seat.reset();
+
+    wl_registry_destroy(registry);
+    wl_display_flush(display);
     wl_display_disconnect(display);
-    printf("disconnected from display\n");
+    logger->info("Disconnected from display\n");
 }
 
 

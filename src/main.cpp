@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
     std::unique_ptr<WL::Display> display = std::make_unique<WL::Display>();
 
-    if (compositor == nullptr) {
+/*    if (compositor == nullptr) {
         fprintf(stderr, "Can't find compositor\n");
         exit(1);
     } else {
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     } else {
         fprintf(stderr, "Created shell surface\n");
     }
-    wl_shell_surface_set_toplevel(shell_surface);
+    wl_shell_surface_set_toplevel(shell_surface);*/
 
     return 0;
 }

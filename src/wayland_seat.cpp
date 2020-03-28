@@ -89,9 +89,9 @@ static const struct wl_seat_listener seat_listener = {
         .capabilities = seat_handle_capabilities,
 };
 
-WL::WaylandSeat::WaylandSeat(wl_registry *const reg, int id):
+WL::WaylandSeat::WaylandSeat(wl_registry* reg, uint32_t id, uint32_t version):
         registry(reg),
-        seat(static_cast<wl_seat*>(wl_registry_bind(registry, id, &wl_seat_interface, 1)))
+        seat(static_cast<wl_seat*>(wl_registry_bind(registry, id, &wl_seat_interface, version)))
 {
     wl_seat_add_listener(seat, &seat_listener, this);
 }
