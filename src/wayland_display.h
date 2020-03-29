@@ -13,6 +13,7 @@
 #include "wayland_seat.h"
 #include "wayland_shm.h"
 #include "wayland_compositor.h"
+#include "wayland_xdg_wm_base.h"
 
 
 namespace WL {
@@ -29,6 +30,7 @@ namespace WL {
         std::shared_ptr<WL::WaylandSeat>        seat;
         std::shared_ptr<WL::WaylandShm>         shared_memory;
         std::shared_ptr<WL::WaylandCompositor>  compositor;
+        std::shared_ptr<WL::WaylandXdgWmBase>   wm_base;
 
         friend void global_registry_handler(void* data, wl_registry* registry,
                                      uint32_t id, const char* interface, uint32_t version);

@@ -2,7 +2,7 @@
 // Created by bear on 3/29/20.
 //
 
-#include "WaylandXdgWmBase.h"
+#include "wayland_xdg_wm_base.h"
 
 
 void WL::xdg_wm_base_ping(void* data, struct xdg_wm_base *shell, uint32_t serial)

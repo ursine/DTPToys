@@ -115,28 +115,9 @@ static void WL::global_registry_handler(void* const data,
     }
 
     if (strcmp(interface, xdg_wm_base_interface.name) == 0) {
+        the_display->wm_base = std::make_shared<WL::WaylandXdgWmBase>(registry, id, 1);
         return;
     }
-
-    /*
-    if (strcmp(interface, wl_compositor_interface.name) == 0) {
-        //compositor = wl_registry_bind(registry, name,
-        //                              &wl_compositor_interface, 1);
-    } //
-      } else if (strcmp(interface, "xdg_wm_base") == 0) {
-                d->wm_base = wl_registry_bind(registry,
-                                              id, &xdg_wm_base_interface, 1);
-                xdg_wm_base_add_listener(d->wm_base, &xdg_wm_base_listener, d);
-        } else if (strcmp(interface, "zwp_fullscreen_shell_v1") == 0) {
-                d->fshell = wl_registry_bind(registry,
-                                             id, &zwp_fullscreen_shell_v1_interface, 1);
-else if (strcmp(interface, xdg_wm_base_interface.name) == 0) {
-        //xdg_wm_base = wl_registry_bind(registry, name, &xdg_wm_base_interface, 1);
-    //}
-      } else if (strcmp(interface, "wl_shell") == 0) {
-          shell = (struct wl_shell *) wl_registry_bind(registry, id,
-                                                       &wl_shell_interface, 1);
-      }*/
 }
 
 static void global_registry_remover(void *data,

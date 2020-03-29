@@ -26,8 +26,6 @@
 
 #pragma once
 
-#ifdef __serenity__
-
 #include <AK/RefCounted.h>
 #include <AK/RefPtr.h>
 
@@ -60,5 +58,3 @@ private:
 }
 
 using AK::SharedBuffer;
-
-#endif

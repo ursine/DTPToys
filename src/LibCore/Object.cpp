@@ -25,12 +25,12 @@
  */
 
 #include <AK/Assertions.h>
-#include <AK/Badge.h>
 #include <AK/JsonObject.h>
+#include <AK/Badge.h>
 #include <LibCore/Event.h>
 #include <LibCore/EventLoop.h>
 #include <LibCore/Object.h>
-#include <stdio.h>
+#include <cstdio>
 
 namespace Core {
 
