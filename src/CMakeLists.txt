@@ -94,7 +94,7 @@ add_executable(DTPToys
         wayland_shm.h
         wayland_compositor.cpp
 		wayland_xdg_wm_base.cpp
-		wayland_xdg_wm_base.h)
+		wayland_xdg_wm_base.h wayland_utils.cpp wayland_utils.h window.cpp window.h)
 
 target_link_libraries(DTPToys
         PRIVATE

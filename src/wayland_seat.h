@@ -8,6 +8,7 @@
 #include <wayland-client-protocol.h>
 #include <memory>
 
+#include "gc_logging_utils.h"
 
 namespace WL {
 
@@ -18,8 +19,16 @@ namespace WL {
     protected:
         wl_seat* const seat;
 
+        std::shared_ptr<spdlog::logger> logger;
+
+    public:
+        bool need_roundtrip;
+        int32_t repeat_rate;
+        int32_t repeat_delay;
+
     public:
         explicit WaylandSeat(wl_registry* registry, uint32_t id, uint32_t version);
-
+        ~WaylandSeat();
     };
+
 }

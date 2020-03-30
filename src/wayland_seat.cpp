@@ -54,7 +54,8 @@ static void pointer_axis_discrete(void *data,
 }
 
 static void pointer_handle_button(void *data, struct wl_pointer *pointer,
-                                  uint32_t serial, uint32_t time, uint32_t button, uint32_t state) {
+    uint32_t serial, uint32_t time, uint32_t button, uint32_t state)
+{
     auto seat = static_cast<wl_seat*>(data);
 
     if (button == BTN_LEFT && state == WL_POINTER_BUTTON_STATE_PRESSED) {
@@ -74,13 +75,78 @@ static const struct wl_pointer_listener pointer_listener = {
         .axis_discrete = pointer_axis_discrete,
 };
 
-
-
-static void seat_handle_capabilities(void *data, struct wl_seat *seat, uint32_t capabilities)
+static void
+keyboard_handle_keymap(void *data, struct wl_keyboard *keyboard,
+                       uint32_t format, int fd, uint32_t size)
 {
+    /* Just so we don’t leak the keymap fd */
+    close(fd);
+}
+
+static void
+keyboard_handle_enter(void *data, struct wl_keyboard *keyboard,
+                      uint32_t serial, struct wl_surface *surface,
+                      struct wl_array *keys)
+{
+}
+
+static void
+keyboard_handle_leave(void *data, struct wl_keyboard *keyboard,
+                      uint32_t serial, struct wl_surface *surface)
+{
+}
+
+static void
+keyboard_handle_key(void *data, struct wl_keyboard *keyboard,
+                    uint32_t serial, uint32_t time, uint32_t key,
+                    uint32_t state)
+{
+}
+
+static void
+keyboard_handle_modifiers(void *data, struct wl_keyboard *keyboard,
+                          uint32_t serial, uint32_t mods_depressed,
+                          uint32_t mods_latched, uint32_t mods_locked,
+                          uint32_t group)
+{
+}
+
+static void
+keyboard_handle_repeat_info(void* data, wl_keyboard* keyboard, int32_t rate, int32_t delay)
+{
+    auto seat = static_cast<WL::WaylandSeat*>(data);
+
+    auto logger = GC::log_get("seat");
+
+    logger->info("Keyboard Rate {} Delay {}", rate, delay);
+
+    seat->repeat_rate = rate;
+    seat->repeat_delay = delay;
+}
+
+
+static const struct wl_keyboard_listener keyboard_listener = {
+        keyboard_handle_keymap,
+        keyboard_handle_enter,
+        keyboard_handle_leave,
+        keyboard_handle_key,
+        keyboard_handle_modifiers,
+        keyboard_handle_repeat_info,
+};
+
+static void seat_handle_capabilities(void *data, wl_seat* seat_ptr, uint32_t capabilities)
+{
+    auto seat = static_cast<WL::WaylandSeat*>(data);
+
     if (capabilities & WL_SEAT_CAPABILITY_POINTER) {
-        wl_pointer* const pointer = wl_seat_get_pointer(seat);
-        wl_pointer_add_listener(pointer, &pointer_listener, seat);
+        wl_pointer* const pointer = wl_seat_get_pointer(seat_ptr);
+        wl_pointer_add_listener(pointer, &pointer_listener, seat_ptr);
+    }
+
+    if (capabilities & WL_SEAT_CAPABILITY_KEYBOARD) {
+        wl_keyboard* keyboard = wl_seat_get_keyboard(seat_ptr);
+        wl_keyboard_add_listener(keyboard, &keyboard_listener, seat_ptr);
+        seat->need_roundtrip = true;
     }
 }
 
@@ -91,7 +157,13 @@ static const struct wl_seat_listener seat_listener = {
 
 WL::WaylandSeat::WaylandSeat(wl_registry* reg, uint32_t id, uint32_t version):
         registry(reg),
-        seat(static_cast<wl_seat*>(wl_registry_bind(registry, id, &wl_seat_interface, version)))
+        seat(static_cast<wl_seat*>(wl_registry_bind(registry, id, &wl_seat_interface, version))),
+        need_roundtrip {false}, repeat_rate {0}, repeat_delay {0}
 {
+    logger = GC::log_get("seat");
     wl_seat_add_listener(seat, &seat_listener, this);
+}
+
+WL::WaylandSeat::~WaylandSeat() {
+    wl_seat_release(seat);
 }

@@ -4,7 +4,6 @@
 
 #include <cstdlib>
 #include <cstring>
-#include <iostream>
 #include <map>
 
 #include "wayland_shm.h"
@@ -135,7 +134,7 @@ static const struct wl_registry_listener registry_listener = {
 };
 
 WL::Display::Display() {
-    auto logger = GC::log_get("display");
+    logger = GC::log_get("display");
 
     display = wl_display_connect(nullptr);
 
@@ -145,25 +144,25 @@ WL::Display::Display() {
     }
     logger->info("Connected to display");
 
-    registry = wl_display_get_registry(display);
-    wl_registry_add_listener(registry, &registry_listener, this);
+    registry.reset(wl_display_get_registry(display), wl_registry_destroy);
+
+    wl_registry_add_listener(registry.get(), &registry_listener, this);
 
     dispatch();
 
-    // Weston docs recommend two roundtrips
-    roundtrip();
-    roundtrip();
+    do {
+        seat->need_roundtrip = false;
+        roundtrip();
+    } while(!seat->need_roundtrip);
 }
 
 WL::Display::~Display() {
-    auto logger = GC::log_get("display");
-
     // Delete the various objects
     compositor.reset();
     shared_memory.reset();
     seat.reset();
 
-    wl_registry_destroy(registry);
+    registry.reset();
     wl_display_flush(display);
     wl_display_disconnect(display);
     logger->info("Disconnected from display\n");
