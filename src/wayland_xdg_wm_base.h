@@ -16,6 +16,8 @@
 
 namespace WL {
 
+    static void xdg_wm_base_ping(void* data, struct xdg_wm_base *shell, uint32_t serial);
+
     class WaylandXdgWmBase {
 
         friend void xdg_wm_base_ping(void* data, struct xdg_wm_base *shell, uint32_t serial);
@@ -30,6 +32,8 @@ namespace WL {
     public:
         explicit WaylandXdgWmBase(wl_registry* reg, uint32_t id, uint32_t version);
 
+        [[nodiscard]]
+        xdg_wm_base* get_base() const {return wm_base;}
     };
 
 };

@@ -20,6 +20,8 @@ namespace WL {
     public:
         WaylandCompositor(wl_registry* registry, uint32_t id, uint32_t version);
         ~WaylandCompositor();
+
+        wl_surface* get_surface();
     };
 
 }

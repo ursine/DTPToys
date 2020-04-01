@@ -5,7 +5,7 @@
 #include "wayland_xdg_wm_base.h"
 
 
-void WL::xdg_wm_base_ping(void* data, struct xdg_wm_base *shell, uint32_t serial)
+static void WL::xdg_wm_base_ping(void* data, struct xdg_wm_base *shell, uint32_t serial)
 {
     auto xdg = static_cast<WL::WaylandXdgWmBase*>(data);
     xdg->logger->info("Got a ping, serial {}", serial);

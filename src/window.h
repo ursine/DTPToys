@@ -7,9 +7,9 @@
 #include "xdg-shell-client-protocol.h"
 #include <wayland-client.h>
 #include <wayland-client-protocol.h>
-#include "wayland_display.h"
 #include <memory>
 
+#include "wayland_display.h"
 
 struct buffer {
     struct wl_buffer *buffer;
@@ -23,24 +23,21 @@ namespace WL {
     protected:
         std::shared_ptr<Display> display;
 
-        struct wl_surface *surface;
-        struct xdg_surface *xdg_surface;
-        struct xdg_toplevel *xdg_toplevel;
-        struct buffer buffers[2];
-        struct buffer *prev_buffer;
-        struct wl_callback *callback;
-
-        bool wait_for_configure;
+        wl_surface *surface;
+        xdg_surface *local_xdg_surface;
+        xdg_toplevel *local_xdg_toplevel;
+        buffer buffers[2];
+        buffer *prev_buffer;
+        wl_callback *callback;
 
         int width;
         int height;
 
     public:
+        bool wait_for_configure;
+
         Window(std::shared_ptr<WL::Display> d, int w, int h);
-
-        Window(const std::shared_ptr<WL::Display> &display, int width, int height);
-
-        ~Window();
+        ~Window() = default;
     };
 
 };

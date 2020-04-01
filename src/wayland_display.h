@@ -14,7 +14,6 @@
 #include "wayland_shm.h"
 #include "wayland_compositor.h"
 #include "wayland_xdg_wm_base.h"
-#include "window.h"
 
 
 namespace WL {
@@ -58,7 +57,11 @@ namespace WL {
 
         wl_display* get_ptr() { return display; }
 
+        [[nodiscard]]
+        std::shared_ptr<WL::WaylandCompositor> get_compositor() const {return compositor;}
 
+        [[nodiscard]]
+        std::shared_ptr<WL::WaylandXdgWmBase> get_base() const { return wm_base; }
     };
 
 }

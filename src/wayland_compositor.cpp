@@ -14,3 +14,7 @@ WL::WaylandCompositor::~WaylandCompositor()
 {
     if (compositor!=nullptr) wl_compositor_destroy(compositor);
 }
+
+wl_surface* WL::WaylandCompositor::get_surface() {
+    return wl_compositor_create_surface(compositor);
+}
