@@ -16,6 +16,8 @@ include(GNUInstallDirs)
 find_package(PkgConfig)
 find_package(spdlog REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(Boost REQUIRED)
+
 pkg_check_modules(PKG_WAYLAND QUIET waylandpp)
 pkg_check_modules(EGL_REQUIRED egl)
 
