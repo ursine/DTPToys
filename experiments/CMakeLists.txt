@@ -18,13 +18,17 @@ find_package(spdlog REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(Boost REQUIRED)
 
-pkg_check_modules(PKG_WAYLAND QUIET wayland-client++)
-pkg_check_modules(PKG_WAYLAND_EXTRA QUIET wayland-client-extra++)
+pkg_check_modules(PKG_WAYLAND wayland-client++)
+pkg_check_modules(PKG_WAYLAND_EXTRA wayland-client-extra++)
+pkg_check_modules(PKG_WAYLAND_CURSOR wayland-cursor++)
 pkg_check_modules(EGL_REQUIRED egl)
 
-include_directories(${PKG_WAYLAND_EXTRA_INCLUDE_DIR} ${PKG_WAYLAND_INCLUDE_DIR})
+include_directories(${PKG_WAYLAND_EXTRA_INCLUDE_DIR}
+                    ${PKG_WAYLAND_INCLUDE_DIR}
+                    ${PKG_WAYLAND_CURSOR_INCLUDE_DIR})
 
 add_executable(wilde src/main.cc)
 
 target_link_libraries(wilde PRIVATE
-    ${PKG_WAYLAND_LIBRARIES} ${PKG_WAYLAND_EXTRA_LIBRARIES} ${SPDLOG_LIBRARIES})
+    ${PKG_WAYLAND_LIBRARIES} ${PKG_WAYLAND_EXTRA_LIBRARIES}
+    ${PKG_WAYLAND_CURSOR_LIBRARIES} ${SPDLOG_LIBRARIES})
