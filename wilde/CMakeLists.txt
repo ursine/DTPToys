@@ -19,7 +19,7 @@ find_package(spdlog REQUIRED)
 find_package(Boost REQUIRED COMPONENTS regex date_time system filesystem thread graph program_options)
 
 check_symbol_exists(posix_fallocate fcntl.h HAVE_POSIX_FALLOCATE)
-check_symbol_exists(memfd_create mman-shared.h HAVE_MEMFD_CREATE)
+check_symbol_exists("__NR_memfd_create" "sys/syscall.h" HAVE_MEMFD_CREATE)
 
 #include_directories(${WAYLAND_CLIENT_INCLUDE_DIR})
 
