@@ -12,17 +12,20 @@ set(Boost_USE_MULTITHREADED ON)
 include(FindPkgConfig)
 include(FeatureSummary)
 include(GNUInstallDirs)
+include(CheckSymbolExists)
 
 #find_package(Wayland REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Boost REQUIRED COMPONENTS regex date_time system filesystem thread graph program_options)
 
+check_symbol_exists(posix_fallocate fcntl.h HAVE_POSIX_FALLOCATE)
+check_symbol_exists(memfd_create mman-shared.h HAVE_MEMFD_CREATE)
 
 #include_directories(${WAYLAND_CLIENT_INCLUDE_DIR})
 
 #add_subdirectory(src)
 
-add_executable(wilde main.cc)
+add_executable(wilde main.cc fontinformation.cc fontinformation.h globalutils.h)
 
 if(Boost_FOUND)
     include_directories(${BOOST_INCLUDE_DIRS})

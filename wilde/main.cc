@@ -8,7 +8,7 @@
 #include <boost/version.hpp>
 #include <boost/algorithm/string.hpp>
 #include <filesystem>
-
+#include "globalutils.h"
 
 template<typename T>
 inline std::string get_error(const T& msg) {
@@ -74,23 +74,37 @@ int main(int argc, char* argv[]) {
   spdlog::info("{} {}.{}.{}", kd.os, kd.kernel_major, kd.kernel_minor,
                kd.kernel_patch);
 
-  const char* path = getenv("XDG_RUNTIME_DIR");
-  if (path==nullptr) {
-    spdlog::error(get_error("no XDG_RUNTIME_DIR in env"));
-    return EXIT_FAILURE;
+//  const char* path = getenv("XDG_RUNTIME_DIR");
+//  if (path==nullptr) {
+//    spdlog::error(get_error("no XDG_RUNTIME_DIR in env"));
+//    return EXIT_FAILURE;
+//  }
+//
+//  const std::string templ { "wayland-wilde-XXXXXX"};
+//
+//  std::filesystem::path xdg_dir(path);
+//  xdg_dir.append(templ);
+//
+//  spdlog::info("Temporary memfd: {}", xdg_dir.string());
+
+  int fd = memfd_create("wayland-cursor", MFD_CLOEXEC | MFD_ALLOW_SEALING);
+  if (fd >= 0) {
+    fcntl(fd, F_ADD_SEALS, F_SEAL_SHRINK | F_SEAL_SEAL);
   }
-
-  const std::string templ { "wayland-wilde-XXXXXX"};
-
-  std::filesystem::path xdg_dir(path);
-  xdg_dir.append(templ);
-
-  spdlog::info("Temporary memfd: {}", xdg_dir.string());
-
-  int fd = mkostemp(xdg_dir.c_str(), O_CLOEXEC);
-  if (fd >= 0)
-    unlink(xdg_dir.c_str());
-
+  int size = 600;
+#ifdef HAVE_POSIX_FALLOCATE
+  /*
+   * Filesystems that do support fallocate will return EINVAL or
+   * EOPNOTSUPP. In this case we need to fall back to ftruncate
+   */
+  errno = posix_fallocate(fd, 0, size);
+  if (errno == SUCCESS_RESULT)
+          return SUCCESS_RESULT;
+  else if (errno != EINVAL && errno != EOPNOTSUPP)
+          return FAIL_RESULT;
+#endif
+  if (ftruncate(fd, size) < 0)
+    return -1;
 
 
   spdlog::info("Shutting down...");
