@@ -8,12 +8,12 @@ set(DEFAULT_BUILD_TYPE "Debug")
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-#include(FindPkgConfig)
+include(FindPkgConfig)
 #include(FeatureSummary)
 #include(GNUInstallDirs)
 
 #find_package(Wayland REQUIRED)
-#find_package(spdlog REQUIRED)
+find_package(spdlog REQUIRED)
 
 #include_directories(${WAYLAND_CLIENT_INCLUDE_DIR})
 
