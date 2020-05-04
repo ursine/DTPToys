@@ -1,64 +1,14 @@
 #include <sys/mman.h>
 #include <spdlog/spdlog.h>
-#include <sys/utsname.h>
 #include <string>
 #include <sstream>
 #include <cstdlib>
 #include <cstdio>
-#include <boost/version.hpp>
-#include <boost/algorithm/string.hpp>
 #include <filesystem>
 #include "globalutils.h"
-
-template<typename T>
-inline std::string get_error(const T& msg) {
-  char buffer[250];
-  std::ostringstream out;
-  out << msg << ": " << strerror_r(errno, buffer, sizeof(buffer));
-  return out.str();
-}
-
-inline long string_to_long(const std::string& in) {
-  char* txt_end;
-  return std::strtol(in.c_str(), &txt_end, 10);
-}
-
-class KernelDetails {
-private:
-  utsname kernel_details {};
-public:
-  long kernel_major;
-  long kernel_minor;
-  long kernel_patch;
-  std::string release;
-  std::string os;
-
-  KernelDetails() {
-    const int res = uname(&kernel_details);
-    if (res == -1) {
-      throw std::runtime_error(get_error(
-          "unable to retrieve kernel details"));
-    }
-    release = std::string(kernel_details.release);
-    os = std::string(kernel_details.sysname);
-
-    std::vector<std::string> results;
-    boost::split(results, release, [](char c){return c == '.';});
-
-    const auto size = results.size();
-    if (size>0) {
-      kernel_major = string_to_long(results[0]);
-    }
-
-    if (size>1) {
-      kernel_minor = string_to_long(results[1]);
-    }
-
-    if (size>2) {
-      kernel_patch = string_to_long(results[2]);
-    }
-  }
-};
+#include "systemdetails.h"
+#include "WaylandManager.h"
+#include <boost/version.hpp>
 
 
 int main(int argc, char* argv[]) {
@@ -105,6 +55,8 @@ int main(int argc, char* argv[]) {
 #endif
   if (ftruncate(fd, size) < 0)
     return -1;
+
+  WaylandManager wm;
 
 
   spdlog::info("Shutting down...");

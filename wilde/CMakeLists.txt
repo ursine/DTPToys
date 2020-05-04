@@ -14,18 +14,20 @@ include(FeatureSummary)
 include(GNUInstallDirs)
 include(CheckSymbolExists)
 
-#find_package(Wayland REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Boost REQUIRED COMPONENTS regex date_time system filesystem thread graph program_options)
 
-check_symbol_exists(posix_fallocate fcntl.h HAVE_POSIX_FALLOCATE)
+check_symbol_exists("posix_fallocate" "fcntl.h" HAVE_POSIX_FALLOCATE)
 check_symbol_exists("__NR_memfd_create" "sys/syscall.h" HAVE_MEMFD_CREATE)
 
 #include_directories(${WAYLAND_CLIENT_INCLUDE_DIR})
 
 #add_subdirectory(src)
+pkg_check_modules(Wayland_Client REQUIRED wayland-client)
 
-add_executable(wilde main.cc fontinformation.cc fontinformation.h globalutils.h)
+
+add_executable(wilde main.cc fontinformation.cc fontinformation.h globalutils.h
+        systemdetails.cc systemdetails.h WaylandManager.cc WaylandManager.h)
 
 if(Boost_FOUND)
     include_directories(${BOOST_INCLUDE_DIRS})
@@ -35,3 +37,5 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     target_link_libraries(wilde ${Boost_LIBRARIES})
 endif()
+
+target_link_libraries(wilde ${Wayland_Client_LIBRARIES})
