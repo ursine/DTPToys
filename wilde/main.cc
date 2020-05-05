@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
   if (ftruncate(fd, size) < 0)
     return -1;
 
-  WaylandManager wm;
+  wl::WaylandManager wm;
 
 
   spdlog::info("Shutting down...");
