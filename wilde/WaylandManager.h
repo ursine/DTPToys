@@ -29,6 +29,11 @@ public:
       :WLBaseException(fmt::format("unable to bind {}", ifc->name)) {}
 };
 
+class FailedToInstance : public WLBaseException {
+public:
+  explicit FailedToInstance(const std::string& obj)
+    :WLBaseException(fmt::format("Failed to instance {}", obj)) {}
+};
 
 // Utilities
 template<typename T>
@@ -83,11 +88,9 @@ public:
   wl_surface* create_surface() {
     auto surface = wl_compositor_create_surface(bound);
     if (surface == nullptr) {
-      fprintf(stderr, "Can't create surface\n");
-      exit(1);
-    } else {
-      fprintf(stderr, "Created surface\n");
+      throw FailedToInstance("surface");
     }
+    return surface;
   }
 };
 

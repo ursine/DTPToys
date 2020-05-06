@@ -11,6 +11,38 @@
 #include <boost/version.hpp>
 
 
+extern "C"
+void _c_log_handler(const char *format, va_list args)
+{
+  // Format string
+  va_list args_copy;
+
+  // vsnprintf consumes args, so copy beforehand
+  va_copy(args_copy, args);
+  int length = std::vsnprintf(nullptr, 0, format, args);
+  if(length < 0)
+  {
+    va_end(args_copy);
+    throw std::runtime_error("Error getting length of formatted wayland-client log message");
+  }
+
+  // check for possible overflow - could be done at runtime but the following should hold on all usual platforms
+  static_assert(std::numeric_limits<std::vector<char>::size_type>::max() >= std::numeric_limits<int>::max() + 1U /* NUL */,
+                "vector constructor must allow size big enough for vsnprintf return value");
+
+  // for terminating NUL
+  length++;
+
+  std::vector<char> buf(static_cast<std::vector<char>::size_type>(length));
+  if(std::vsnprintf(buf.data(), buf.size(), format, args_copy) < 0)
+    throw std::runtime_error("Error formatting wayland-client log message");
+
+  va_end(args_copy);
+
+  spdlog::info(buf.data());
+}
+
+
 int main(int argc, char* argv[]) {
   spdlog::info("Booting up... (spdlog version {}.{}.{})",
                SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
@@ -18,6 +50,8 @@ int main(int argc, char* argv[]) {
   spdlog::info("Boost version: {}.{}.{}",
                BOOST_VERSION/100000, BOOST_VERSION/100%1000,
                BOOST_VERSION%100);
+
+  wl_log_set_handler_client(_c_log_handler);
 
   // Find out what kernel we are running
   KernelDetails kd;
