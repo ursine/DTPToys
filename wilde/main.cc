@@ -12,8 +12,9 @@
 
 
 extern "C"
-void _c_log_handler(const char *format, va_list args)
+void _c_log_handler(const char* format, va_list args)
 {
+  spdlog::info(format);
   // Format string
   va_list args_copy;
 

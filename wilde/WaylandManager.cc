@@ -58,36 +58,24 @@ wl::WaylandManager::WaylandManager():
 
   res = wl_display_roundtrip(display.get());
 
-  /*surface.reset(wl_compositor_create_surface(compositor.get()));
-
-  if (surface == nullptr) {
-    fprintf(stderr, "Can't create surface\n");
-    exit(1);
-  } else {
-    fprintf(stderr, "Created surface\n");
-  }*/
 }
 
-void wl::WaylandManager::add_compositor(
-    wl_registry* reg, uint32_t name, uint32_t version)
+void wl::WaylandManager::add_compositor(wl_registry* reg, uint32_t name, uint32_t version)
 {
   spdlog::info("Compositor added");
-  compositor.reset(new wl::Compositor(reg, name, version));
+  compositor.reset(new wl::Compositor(this, reg, name, version));
 }
 
-void wl::WaylandManager::add_shell(
-    wl_registry* reg, uint32_t name, uint32_t version)
+void wl::WaylandManager::add_shell(wl_registry* reg, uint32_t name, uint32_t version)
 {
   spdlog::info("Shell added");
-  shell.reset(new wl::Shell(reg, name, version));
+  shell.reset(new wl::Shell(this, reg, name, version));
 }
 
-wl::Compositor::Compositor(wl_registry* registry, uint32_t name, uint32_t version)
-  :Bindable(registry, name, version, &wl_compositor_interface)
-{
-}
+wl::Compositor::Compositor(WaylandManager* mgr, wl_registry* registry, uint32_t name, uint32_t version)
+  :Bindable(mgr, registry, name, version, &wl_compositor_interface)
+{}
 
-wl::Shell::Shell(wl_registry *registry, uint32_t name, uint32_t version)
-  :Bindable(registry, name, version, &wl_shell_interface)
-{
-}
+wl::Shell::Shell(WaylandManager* mgr, wl_registry *registry, uint32_t name, uint32_t version)
+  :Bindable(mgr, registry, name, version, &wl_shell_interface)
+{}
